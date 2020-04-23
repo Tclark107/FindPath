@@ -98,7 +98,7 @@ int getParent(Graph G, int u) {
 // Pre: 1 <= u <= getOrder(G)
 int getDist(Graph G, int u) {
    if(u < 1 || u > getOrder(G)) {
-      printf("getParent() called on a vertex out of bounds\n");
+      printf("getDist() called on a vertex out of bounds\n");
       exit(1);
    }
    return G->distance[u];
@@ -106,11 +106,11 @@ int getDist(Graph G, int u) {
 
 // getPath()
 // Appends the vertices of the shortest path from source to u to the List L
-// or NIL if it doesnt exist;
+// or NIL if it doesnt exist.
 // Pre: getSource(G)!=NIL, 1 <= u <= getOrder(G)
 void getPath(List L, Graph G, int u) {
    if(u < 1 || u > getOrder(G)) {
-      printf("getParent() called on a vertex out of bounds\n");
+      printf("getPath() called on a vertex out of bounds\n");
       exit(1);
    }
 }
@@ -121,15 +121,38 @@ void makeNull(Graph G) {
    
 }
 
+// addNeighbors()
+// Does the insert action for addEdge() and addArc()
+void addNeighbors(Graph G, int x, int y) {
+   if(length(G->adj[x])>0) { //I may need to check whether element exists
+      if(back(G->adj[x]) < y) {
+         append(G->adj[x],y);
+      } else {
+         moveFront(G->adj[x]);
+         while(index(G->adj[x])>=0) {
+            if(get(G->adj[x]) > y) {
+               insertBefore(G->adj[x],y);
+               break;
+            }
+            moveNext(G->adj[x]);
+         }
+      }
+   } else {
+      append(G->adj[x],y);
+   }
+}
+
 // void addEdge()
 // Inserts a new edge joining u to v, i.e. u is added to the adjacency
 // List of v and vice versa. Note: make sure these are sorted
 // Pre: 1 <= u <= getOrder(G)
 void addEdge(Graph G, int u, int v) {
    if(u < 1 || u > getOrder(G)) {
-      printf("getParent() called on a vertex out of bounds\n");
+      printf("addEdge() called on a vertex out of bounds\n");
       exit(1);
    }
+   addNeighbors(G,u,v);
+   addNeighbors(G,v,u);
 }
 
 // void addArc()
@@ -138,9 +161,10 @@ void addEdge(Graph G, int u, int v) {
 // Pre: 1 <= u <= getOrder(G)
 void addArc(Graph G, int u, int v) {
    if(u < 1 || u > getOrder(G)) {
-      printf("getParent() called on a vertex out of bounds\n");
+      printf("addArc() called on a vertex out of bounds\n");
       exit(1);
    }
+   addNeighbors(G,u,v); 
 }
 
 // void BFS()
@@ -155,5 +179,9 @@ void BFS(Graph G, int s) {
 // Prints the adjacency list representation of G to the file pointed to
 // by out.
 void printGraph(FILE* out, Graph G) {
-   
+   for(int i=1;i<=G->order; i++){
+      fprintf(out,"%d: ", i);
+      printList(out,G->adj[i]);
+      fprintf(out,"\n");
+   } 
 }
