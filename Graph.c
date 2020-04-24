@@ -113,12 +113,24 @@ void getPath(List L, Graph G, int u) {
       printf("getPath() called on a vertex out of bounds\n");
       exit(1);
    }
+   if(getSource(G)==NIL) {
+      printf("getPath() was called before BFS() was called\n");
+      exit(1);
+   }
+   clear(L); 
+   prepend(L,u);
+   while(getParent(G,u) != NIL) {
+      prepend(L, getParent(G,u));
+      u = getParent(G,u);
+   }
 }
 
 // makeNull()
 // Deletes all edges of G.
 void makeNull(Graph G) { 
-   
+   for(int i=1;i<=G->order;++i) {
+      clear(G->adj[i]);
+   }
 }
 
 // addNeighbors()
@@ -170,7 +182,38 @@ void addArc(Graph G, int u, int v) {
 // void BFS()
 // BFS algorithm.
 void BFS(Graph G, int s) {
+   int x,y;
+   G->source = s;
+   for(x=1;x<=G->order;++x) {
+      G->color[x] = WHITE;
+      G->distance[x] = INF;
+      G->parent[x] = NIL;
+   }
+   G->color[s] = GRAY;
+   G->distance[s] = 0;
+   G->parent[s] = NIL;
+   
+   List BFSQ = newList();
+   append(BFSQ,s);
 
+   while(length(BFSQ) > 0) {
+      moveFront(BFSQ);
+      x = get(BFSQ);
+      delete(BFSQ);
+      moveFront(G->adj[x]);
+      while(index(G->adj[x])>=0){
+         y = get(G->adj[x]);
+         if(G->color[y] == WHITE) {
+            G->color[y] = GRAY;
+            G->distance[y] = G->distance[x]+1;
+            G->parent[y] = x;
+            append(BFSQ,y);
+         }
+         moveNext(G->adj[x]);
+      }
+      G->color[x] = BLACK;
+   }
+   freeList(&BFSQ);
 }
 
 /*** Other operations ***/

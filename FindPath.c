@@ -17,7 +17,8 @@ int main(int argc, char * argv[]){
 
    FILE *in, *out;
    int start, end;
-   Graph G;;
+   Graph G;
+   List L = newList();
 
    // check command line for correct number of arguments
    if( argc != 3 ){
@@ -40,56 +41,45 @@ int main(int argc, char * argv[]){
    // get the order of the graph;
    fscanf(in, "%d", &start);
    G = newGraph(start);
-   //fprintf(out,"Order is: %d\n",getOrder(G));
-   //fprintf(out,"print Graph:\n");
-   //printGraph(out,G);
-   //fprintf(out,"after Graph:\n");
+
 
    /* read in a line of input and add an edge or Arc */
    while( fscanf(in, "%d %d", &start, &end) != EOF ) {
       if(start == 0) break;
-      //fprintf(out,"%d %d\n", start,end);
       addEdge(G,start,end);
    }
 
    printGraph(out,G);
+   fprintf(out, "\n");
 
-   //fprintf(out,"after adds:\n");
-   
    // Run BFS to find the shortest path from source to destination.
    while( fscanf(in, "%d %d", &start, &end) != EOF ) {
       if(start == 0) break;
-      //fprintf(out,"%d %d\n", start,end);
+
+      // Run BFS and find the shortest path from start to end
+      BFS(G,start);
+      getPath(L,G,end);
+      
+      moveFront(L);
+      if(get(L) != start) {
+         fprintf(out,"The distance from %d to %d is infinity\n",start,end);
+         fprintf(out,"No %d-%d path exists\n",start,end);
+      } else {
+         fprintf(out,"The distance from %d to %d is %d\n",start,end,getDist(G,end));
+         fprintf(out,"A shortest %d-%d path is: ",start,end);
+         printList(out,L);
+         fprintf(out,"\n");
+      }
+      fprintf(out,"\n");
    }
 
 
    /* close files */
    fclose(in);
    fclose(out);
-
+   
+   freeList(&L);
    freeGraph(&G);
 
    return(0);
 }
-
-/*int n, count=0;
-   FILE *in, *out;
-   char line[MAX_LEN];
-   char tokenlist[MAX_LEN];
-   char* token;
-
-   // read each line of input file, then count and print tokens 
-   while( fgets(line, MAX_LEN, in) != NULL)  {
-      count++;
-      n = 0;
-      token = strtok(line, " \n");
-      tokenlist[0] = '\0';
-      while( token!=NULL ){
-         strcat(tokenlist, "   ");
-         strcat(tokenlist, token);
-         strcat(tokenlist, "\n");
-         n++;
-         token = strtok(NULL, " \n");
-      }
-      fprintf(out, "%s\n", tokenlist);
-   } */
