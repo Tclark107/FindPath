@@ -60,14 +60,18 @@ int main(int argc, char * argv[]){
       BFS(G,start);
       getPath(L,G,end);
       
-      moveFront(L);
+      moveBack(L);
+      for(int i = getDist(G,end);i>0;--i) movePrev(L);
       if(get(L) != start) {
          fprintf(out,"The distance from %d to %d is infinity\n",start,end);
          fprintf(out,"No %d-%d path exists\n",start,end);
       } else {
          fprintf(out,"The distance from %d to %d is %d\n",start,end,getDist(G,end));
          fprintf(out,"A shortest %d-%d path is: ",start,end);
-         printList(out,L);
+         while(index(L)>=0) {
+            fprintf(out,"%d ",get(L));
+            moveNext(L);
+         }
          fprintf(out,"\n");
       }
       fprintf(out,"\n");

@@ -9,9 +9,9 @@
 #  make checkClient         tests GraphClient for memory leaks
 #------------------------------------------------------------------------------
 
-BASE_SOURCES   = Graph.c List.c
-BASE_OBJECTS   = Graph.o List.o
-HEADERS        = Graph.h List.h
+BASE_SOURCES   = List.c Graph.c
+BASE_OBJECTS   = List.o Graph.o
+HEADERS        = List.h Graph.h
 COMPILE        = gcc -c -std=c11 -Wall
 LINK           = gcc -o
 REMOVE         = rm -f

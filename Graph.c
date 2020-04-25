@@ -7,6 +7,7 @@
 
 #include<stdio.h>
 #include<stdlib.h>
+
 #include"List.h"
 #include"Graph.h"
 
@@ -117,12 +118,24 @@ void getPath(List L, Graph G, int u) {
       printf("getPath() was called before BFS() was called\n");
       exit(1);
    }
-   clear(L); 
-   prepend(L,u);
+   //clear(L);
+   List I = newList(); 
+   prepend(I,u);
    while(getParent(G,u) != NIL) {
-      prepend(L, getParent(G,u));
+      prepend(I, getParent(G,u));
       u = getParent(G,u);
    }
+   if(u == G->source) {
+      moveFront(I);
+      while(index(I) >= 0) {
+         append(L,get(I));
+         moveNext(I);
+      }
+   } else {
+      append(L,NIL);
+   }
+   
+   freeList(&I);
 }
 
 // makeNull()
@@ -165,6 +178,7 @@ void addEdge(Graph G, int u, int v) {
    }
    addNeighbors(G,u,v);
    addNeighbors(G,v,u);
+   G->size++;
 }
 
 // void addArc()
@@ -177,6 +191,7 @@ void addArc(Graph G, int u, int v) {
       exit(1);
    }
    addNeighbors(G,u,v); 
+   G->size++;
 }
 
 // void BFS()
