@@ -2,12 +2,11 @@ This is a project using my List ADT in building a Graph ADT.  The purpose of
 this project is to build a Breadth first search algorithm to find
 the shortest path between any one vertex and the source.
 
-I have worked on this project for: 12.5 hours 
+I have worked on this project for: 13.5 hours 
 thus far.
 
 Graph.h and Graph.c
 These are my graph ADT files.
 
 FindPath.c
-This runs different functions from the graph ADT and 
-prints it out to a file to specifications.
+This does something.
