@@ -9,4 +9,5 @@ Graph.h and Graph.c
 These are my graph ADT files.
 
 FindPath.c
-This does something.
+This runs different functions from the graph ADT and 
+prints it out to a file to specifications.
